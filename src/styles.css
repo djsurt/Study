@@ -1,1 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap');
+@import "tailwindcss";
+
+/* Display heading style for the main title */
+.display-heading {
+	font-family: 'Playfair Display', Georgia, serif;
+	font-weight: 700;
+	font-size: 8.5rem;
+	line-height: 1;
+	letter-spacing: -0.02em;
+	text-shadow: none;
+}
+
+@media (max-width: 640px) {
+	.display-heading { font-size: 3rem; }
+}
+
+/* CTA cube button */
+.cta-cube {
+	display: inline-block;
+	border-radius: 0.5rem; /* slightly rounded square */
+	padding: 0.75rem 1.75rem; /* keeps the visual square-ish button */
+	box-shadow: 0 6px 0 rgba(15, 23, 42, 0.06), /* subtle base */
+							0 10px 20px rgba(2,6,23,0.08); /* soft depth */
+	transform: translateY(0);
+}
+
+.cta-cube:hover {
+	transform: translateY(-6px) scale(1.01);
+	box-shadow: 0 10px 0 rgba(15,23,42,0.06), 0 18px 30px rgba(2,6,23,0.10);
+}
+
+.cta-cube:active {
+	transform: translateY(0);
+	box-shadow: 0 4px 0 rgba(15,23,42,0.04), 0 8px 12px rgba(2,6,23,0.06);
+}
