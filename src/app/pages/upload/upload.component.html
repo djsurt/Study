@@ -1,0 +1,85 @@
+<div class="upload-container pt-20 min-h-screen pb-16 bg-gradient-to-br from-sky-300 to-sky-500">
+  <div class="max-w-4xl mx-auto px-8 py-10">
+    
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <h1 class="text-5xl font-bold text-white mb-4">Upload New Material</h1>
+      <p class="text-lg text-white/90">
+        Upload your lecture audio or study materials (PDFs, notes, or slides).
+        We'll generate summaries and flashcards automatically.
+      </p>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input 
+      type="file" 
+      #fileInput 
+      hidden 
+      (change)="onFileSelected($event)"
+      accept=".pdf,.mp3,.wav,.mp4,.doc,.docx,.txt,.ppt,.pptx"
+    />
+
+    <!-- Upload Zone (Clickable + Drag-Drop Area) -->
+    <div 
+      class="bg-white p-12 text-center cursor-pointer transition-all duration-200 border-4 border-dashed border-sky-300 hover:border-sky-500 hover:bg-sky-50"
+      (click)="fileInput.click()"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event)"
+    >
+      <!-- No File Selected State -->
+      <div *ngIf="!selectedFile">
+        <svg class="w-16 h-16 mx-auto mb-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+        </svg>
+        <p class="text-xl font-semibold text-slate-700 mb-2">Click to upload or drag and drop</p>
+        <p class="text-sm text-slate-500">PDF, Audio (MP3, WAV), Video, Documents, or Slides</p>
+      </div>
+
+      <!-- File Selected State -->
+      <div *ngIf="selectedFile && !isUploading" class="flex items-center justify-center gap-4">
+        <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div class="text-left">
+          <p class="text-lg font-semibold text-slate-700">{{ fileName }}</p>
+          <p class="text-sm text-slate-500">Click to change file</p>
+        </div>
+      </div>
+
+      <!-- Uploading State -->
+      <div *ngIf="isUploading">
+        <div class="animate-spin w-12 h-12 border-4 border-sky-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p class="text-lg font-semibold text-slate-700">Uploading... {{ uploadProgress }}%</p>
+        <div class="w-full bg-slate-200 h-2 mt-4 overflow-hidden">
+          <div 
+            class="bg-sky-500 h-full transition-all duration-300"
+            [style.width.%]="uploadProgress"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-4 justify-center mt-8" *ngIf="selectedFile && !isUploading">
+      <button 
+        (click)="removeFile()"
+        class="px-8 py-4 bg-red-500 text-white font-semibold hover:bg-red-600 transition-colors"
+      >
+        Remove File
+      </button>
+      <button 
+        (click)="uploadFile()"
+        class="px-8 py-4 bg-green-500 text-white font-semibold hover:bg-green-600 transition-colors"
+      >
+        Upload & Process
+      </button>
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="uploadProgress === 100 && !isUploading" class="mt-8 bg-green-100 border-l-4 border-green-500 p-6 text-center">
+      <p class="text-green-700 font-semibold text-lg">✓ Upload Complete!</p>
+      <p class="text-green-600 mt-2">Your file has been processed successfully.</p>
+    </div>
+
+  </div>
+</div>

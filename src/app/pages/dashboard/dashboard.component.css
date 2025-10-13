@@ -1,0 +1,24 @@
+/* Custom gradient background */
+.dashboard-container {
+  background: linear-gradient(135deg, rgb(56, 189, 248) 0%, rgb(14, 165, 233) 100%);
+}
+
+/* Stat card hover - subtle scale and background shift */
+.stat-card {
+  cursor: pointer;
+}
+
+.stat-card:hover {
+  transform: scale(1.05);
+  background-color: rgb(240, 249, 255);
+}
+
+/* Activity item hover - slide right and expand border */
+.activity-item {
+  cursor: pointer;
+}
+
+.activity-item:hover {
+  transform: translateX(8px);
+  border-left-width: 8px;
+}

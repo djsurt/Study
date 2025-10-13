@@ -1,5 +1,52 @@
 <app-navbar></app-navbar>
 
-<div class="dashboard-container">
-  <p>dashboard works!</p>
+<div class="dashboard-container pt-20 min-h-screen pb-16">
+
+  <!--Welcome section-->
+  <section class="max-w-6xl mx-auto px-8 py-10 text-center">
+    <h2 class="text-5xl font-bold text-white mb-3 drop-shadow">Welcome back, User!</h2>
+    <p class="text-lg text-white/90">You've studied 4 materials this week.</p>
+  </section>
+
+  <!--Quick Stats-->
+  <section class="max-w-6xl mx-auto px-8 py-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="stat-card bg-white p-8 text-center transition-all duration-200">
+        <h3 class="text-sm font-semibold text-sky-600 uppercase tracking-wide mb-3">Study Time</h3>
+        <p class="text-4xl font-bold text-slate-900">5h 20m</p>
+    </div>
+    <div class="stat-card bg-white p-8 text-center transition-all duration-200">
+        <h3 class="text-sm font-semibold text-sky-600 uppercase tracking-wide mb-3">Flashcards Reviewed</h3>
+        <p class="text-4xl font-bold text-slate-900">120</p>
+    </div>
+    <div class="stat-card bg-white p-8 text-center transition-all duration-200">
+        <h3 class="text-sm font-semibold text-sky-600 uppercase tracking-wide mb-3">Quizzes Average</h3>
+        <p class="text-4xl font-bold text-slate-900">83%</p>
+    </div>
+  </section>
+
+  <!--Recent Activity-->
+  <section class="max-w-6xl mx-auto px-8 py-8">
+    <h2 class="text-3xl font-bold text-white mb-5 drop-shadow">Recent Activity</h2>
+    <ul class="space-y-3">
+      <li class="activity-item bg-white p-5 text-slate-700 border-l-4 border-sky-600 transition-all duration-200">
+        Reviewed 20 flashcards on Biology
+      </li>
+      <li class="activity-item bg-white p-5 text-slate-700 border-l-4 border-sky-600 transition-all duration-200">
+        Took a quiz on Chemistry - Score: 85%
+      </li>
+      <li class="activity-item bg-white p-5 text-slate-700 border-l-4 border-sky-600 transition-all duration-200">
+        Uploaded new notes on History
+      </li>
+    </ul>
+  </section>
+
+  <!--CTA-->
+  <section class="max-w-6xl mx-auto px-8 py-8 flex gap-4 justify-center flex-wrap">
+    <button routerLink="/upload" class="px-8 py-4 bg-sky-500 text-white font-semibold hover:bg-sky-600 transition-colors">
+      Upload New Material
+    </button>
+    <button routerLink="/quiz" class="px-8 py-4 bg-green-500 text-white font-semibold hover:bg-green-600 transition-colors">
+      Take Quick Quiz
+    </button>
+  </section>
 </div>
