@@ -13,7 +13,11 @@ export class UploadComponent {
   fileName: string = '';
 
   onFileSelected(event: Event) {
-
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.fileName = this.selectedFile.name;
+    }
   }
 
   onDragOver(event: DragEvent){
@@ -21,7 +25,11 @@ export class UploadComponent {
   }
 
   onDrop(event: DragEvent){
-    
+    event.preventDefault();
+    if(event.dataTransfer?.files && event.dataTransfer.files.length > 0){
+      this.selectedFile = event.dataTransfer.files[0];
+      this.fileName = this.selectedFile.name;
+    }
   }
 
   uploadFile(){
@@ -29,6 +37,6 @@ export class UploadComponent {
   }
 
   removeFile(){
-    
+
   }
 }
