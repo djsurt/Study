@@ -21,7 +21,7 @@ export class UploadComponent {
   }
 
   onDragOver(event: DragEvent){
-
+    event.preventDefault();
   }
 
   onDrop(event: DragEvent){
@@ -33,10 +33,28 @@ export class UploadComponent {
   }
 
   uploadFile(){
+    if (!this.selectedFile) return;
 
+    this.isUploading = true;
+    this.uploadProgress = 0;
+
+    // Simulate upload progress with a mock implementation
+    const interval = setInterval(() => {
+      this.uploadProgress += 10;
+      
+      if (this.uploadProgress >= 100) {
+        clearInterval(interval);
+        this.isUploading = false;
+        // Optional: Reset after showing success message
+        // setTimeout(() => this.removeFile(), 3000);
+      }
+    }, 200); // Updates every 200ms for smooth progress
   }
 
   removeFile(){
-
+    this.selectedFile = null;
+    this.fileName = '';
+    this.uploadProgress = 0;
+    this.isUploading = false;
   }
 }
