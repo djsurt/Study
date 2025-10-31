@@ -6,8 +6,13 @@ from typing import Optional
 from utils.auth import verify_jwt_token
 from services.upload_service import upload_to_supabase_storage
 from jose import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import uuid
+from pydantic import BaseModel
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
 
 app = FastAPI()
 
@@ -37,35 +42,62 @@ async def get_current_user(authorization: Optional[str] = Header(None)):
 async def root():
     return {"message": "Hello world"}
 
-#Test user token generation endpoint
-@app.get("/test/generate-token")
-async def generate_test_token(user_id: str = str(uuid.uuid4())):
-    """
-    Generate a test JWT token for testing authentication.
-    Usage: GET http://localhost:8000/test/generate-token?user_id=your-test-id
-    """
-    # Get the JWT secret from environment
-    secret = os.getenv("SUPABASE_JWT_SECRET", "your-secret-key-for-testing")
+@app.post("/auth/signup")
+async def signup(credentials: LoginRequest):
+    """Create a new user in supabase"""
+    try:
+        response = supabase.auth.sign_up({
+            "email": credentials.email,
+            "password": credentials.password
+        })
+
+        if not response.user:
+            raise HTTPException(status_code=400, detail="Signup failed")
+        
+        # Check if session exists (might be None if email confirmation required)
+        if response.session and response.session.access_token:
+            return {
+                "access_token": response.session.access_token,
+                "user": {
+                    "id": response.user.id,
+                    "email": response.user.email
+                }
+            }
+        else:
+            # Email confirmation required - return user but no token yet
+            return {
+                "message": "User created successfully. Please check your email to confirm your account.",
+                "user": {
+                    "id": response.user.id,
+                    "email": response.user.email
+                },
+                "requires_confirmation": True
+            }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Signup failed: {str(e)}")
+
+@app.post("/auth/login")
+async def login(credentials: LoginRequest):
+    """Login with existing Supabase user"""
+    try:
+        response = supabase.auth.sign_in_with_password({
+            "email": credentials.email,
+            "password": credentials.password
+        })
+
+        # Check if login was successful
+        if not response.user:
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+        return {
+            "access_token": response.session.access_token,
+            "user": {
+                "id": response.user.id,
+                "email": response.user.email
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Login failed: {str(e)}")
     
-    # Create a test payload
-    payload = {
-        "sub": user_id,  # Subject (user ID)
-        "email": f"{user_id}@test.com",
-        "role": "authenticated",
-        "iat": datetime.now(datetime.timezone.utc),  # Issued at
-        "exp": datetime.now(datetime.timezone.utc) + timedelta(hours=24)  # Expires in 24 hours
-    }
-    
-    # Generate the token
-    token = jwt.encode(payload, secret, algorithm="HS256")
-    
-    return {
-        "message": "Test token generated successfully",
-        "token": token,
-        "user_id": user_id,
-        "expires_in": "24 hours",
-        "usage": f"Add this header to your requests: Authorization: Bearer {token}"
-    }
 
 @app.post("/upload")
 async def upload_file(
