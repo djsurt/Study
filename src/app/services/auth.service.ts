@@ -4,6 +4,7 @@ import { Router } from '@angular/router';  // Fixed: was 'express'
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<any>('http://localhost:8000/auth/login', {
+    return this.http.post<any>(`${environment.apiUrl}/auth/login`, {
       email,
       password
     }).pipe(
