@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../environments/environment';
+import { response } from 'express';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,23 @@ export class AuthService {
           localStorage.setItem('user', JSON.stringify(response.user));
         }
         // Update the observable so components can react
+        this.currentUserSubject.next(response.user);
+      })
+    );
+  }
+
+  signup(email: string, password: string, fullName?: string): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/auth.signup`, {
+      email,
+      password,
+      full_name: fullName
+    }).pipe(
+      tap(response => {
+        // Automatically log in after signup
+        if(isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('access_token', response.access_token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+        }
         this.currentUserSubject.next(response.user);
       })
     );

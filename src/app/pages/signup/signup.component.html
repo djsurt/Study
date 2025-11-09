@@ -1,0 +1,104 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 to-blue-50 px-4">
+  <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl">
+    <!-- Header -->
+    <div class="text-center">
+      <h2 class="text-4xl font-bold text-gray-900 mb-2" style="font-family: 'Playfair Display', serif;">
+        Create Account
+      </h2>
+      <p class="text-gray-600">Join StudyAI today</p>
+    </div>
+
+    <!-- Error Message -->
+    @if(errorMessage) {
+      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <!-- Signup Form -->
+    <form (ngSubmit)="onSignup()" class="mt-8 space-y-6">
+      <!-- Full Name (Optional) -->
+      <div>
+        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">
+          Full Name (Optional)
+        </label>
+        <input
+          id="fullName"
+          type="text"
+          [(ngModel)]="fullName"
+          name="fullName"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition"
+          placeholder="John Doe"
+        />
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+          Email Address
+        </label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition"
+          placeholder="you@example.com"
+        />
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+          Password
+        </label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition"
+          placeholder="••••••••"
+        />
+        <p class="text-xs text-gray-500 mt-1">Must be at least 6 characters</p>
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
+          Confirm Password
+        </label>
+        <input
+          id="confirmPassword"
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        [disabled]="isLoading"
+        class="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {{ isLoading ? 'Creating Account...' : 'Sign Up' }}
+      </button>
+    </form>
+
+    <!-- Login Link -->
+    <div class="text-center mt-4">
+      <p class="text-gray-600">
+        Already have an account?
+        <a routerLink="/login" class="text-sky-500 hover:text-sky-600 font-semibold">
+          Log in
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
