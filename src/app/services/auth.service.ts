@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   signup(email: string, password: string, fullName?: string): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/auth.signup`, {
+    return this.http.post<any>(`${environment.apiUrl}/auth/signup`, {
       email,
       password,
       full_name: fullName
