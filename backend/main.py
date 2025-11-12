@@ -120,15 +120,20 @@ async def upload_file(
     user_id = "default_user"
     file_url = await upload_to_supabase_storage(file, user_id)
     
-    supabase.table("materials").insert({
+    # Insert material with 'pending' status
+    result = supabase.table("materials").insert({
         "user_id": user_id,
         "filename": file.filename,
         "file_url": file_url,
         "file_type": file.content_type,
+        "status": "pending"  # Track processing status
     }).execute()
+    
+    material_id = result.data[0]["id"] if result.data else None
 
     return {
         "message": "File uploaded successfully",
+        "material_id": material_id,
         "filename": file.filename,
         "url": file_url
     }
