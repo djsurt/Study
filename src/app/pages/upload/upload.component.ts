@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { response } from 'express';
 
 @Component({
   selector: 'app-upload',
@@ -38,17 +39,25 @@ export class UploadComponent {
     this.isUploading = true;
     this.uploadProgress = 0;
 
-    // Simulate upload progress with a mock implementation
-    const interval = setInterval(() => {
-      this.uploadProgress += 10;
-      
-      if (this.uploadProgress >= 100) {
-        clearInterval(interval);
-        this.isUploading = false;
-        // Optional: Reset after showing success message
-        // setTimeout(() => this.removeFile(), 3000);
-      }
-    }, 200); // Updates every 200ms for smooth progress
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    fetch('http://localhost:8000/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Upload successful:', data);
+      this.isUploading = false;
+      this.uploadProgress = 100;
+      alert(`File uploaded successfully: ${data.url}`);
+    })
+    .catch(error => {
+      console.log('Upload failed', error);
+      this.isUploading = false;
+      alert('File upload failed. Please try again.');
+    });
   }
 
   removeFile(){

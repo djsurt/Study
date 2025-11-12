@@ -54,6 +54,17 @@ async def signup(credentials: LoginRequest):
         if not response.user:
             raise HTTPException(status_code=400, detail="Signup failed")
         
+        # Insert user into users table
+        try:
+            supabase.table("users").insert({
+                "id": response.user.id,
+                "email": response.user.email,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }).execute()
+        except Exception as db_error:
+            print(f"Warning: Failed to insert user into users table: {str(db_error)}")
+            # Continue even if users table insert fails (user is already in auth)
+        
         # Check if session exists (might be None if email confirmation required)
         if response.session and response.session.access_token:
             return {
@@ -102,10 +113,11 @@ async def login(credentials: LoginRequest):
 @app.post("/upload")
 async def upload_file(
     file: UploadFile = File(...), 
-    current_user: dict = Depends(get_current_user)
+    # current_user: dict = Depends(get_current_user)
 ):
     """Accept file upload from the Angular App"""
-    user_id = current_user.get("sub")
+    # user_id = current_user.get("sub")
+    user_id = "default_user"
     file_url = await upload_to_supabase_storage(file, user_id)
     
     supabase.table("materials").insert({

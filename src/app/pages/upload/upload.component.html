@@ -81,6 +81,14 @@
       >
         Upload & Process
       </button>
+
+      <!--Progress Bar-->
+      @if (isUploading) {
+        <div class="mt-4">
+          <p> Uploading: {{ uploadProgress }}%</p>
+          <div class="progress-bar bg-blue-500 h-2 rounded-lg"></div>
+        </div>
+      }
     </div>
   }
 
