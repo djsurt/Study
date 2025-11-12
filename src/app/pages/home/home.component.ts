@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
-import supabase
+import { supabase } from '../../supabaseClient';
 @Component({
   selector: 'app-home',
   imports: [RouterLink, RouterOutlet],
@@ -10,8 +10,18 @@ import supabase
 export class HomeComponent implements OnInit {
 
   async ngOnInit() {
-    // Initialization logic here
-    const { data: {session} } = await supaba
+
+    const { data: {session} } = await supabase.auth.getSession();
+    if(!session) {
+      supabase.auth.onAuthStateChange((event, session) => {
+        if(session){
+          console.log("User signed in", session.user);
+        }
+      });
+    } else{
+      console.log("User already signed in", session.user);
+    }
+
   }
 
 }
